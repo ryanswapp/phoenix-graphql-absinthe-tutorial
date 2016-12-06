@@ -15,4 +15,8 @@ defmodule PhoenixGraphql.Schema.Types do
     field :body, :string
     field :user, :user, resolve: assoc(:user)
   end
+
+  object :session do
+    field :token, :string
+  end
 end

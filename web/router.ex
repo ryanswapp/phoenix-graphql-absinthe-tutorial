@@ -9,8 +9,8 @@ defmodule PhoenixGraphql.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
+  pipeline :graphql do
+    plug PhoenixGraphql.Web.Context
   end
 
   scope "/", PhoenixGraphql do
@@ -19,14 +19,14 @@ defmodule PhoenixGraphql.Router do
     get "/", PageController, :index
   end
 
-  forward "/api", Absinthe.Plug,
-    schema: PhoenixGraphql.Schema
+  scope "/api" do
+    pipe_through :graphql
+
+    forward "/", Absinthe.Plug,
+      schema: PhoenixGraphql.Schema
+  end
 
   forward "/graphiql", Absinthe.Plug.GraphiQL,
     schema: PhoenixGraphql.Schema
 
-  # Other scopes may use custom stacks.
-  # scope "/api", PhoenixGraphql do
-  #   pipe_through :api
-  # end
 end
