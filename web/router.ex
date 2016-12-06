@@ -10,6 +10,8 @@ defmodule PhoenixGraphql.Router do
   end
 
   pipeline :graphql do
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.LoadResource
     plug PhoenixGraphql.Web.Context
   end
 
